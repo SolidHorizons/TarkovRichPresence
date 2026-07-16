@@ -17,8 +17,8 @@ static class Program
     {
         // To customize application configuration such as set high DPI settings or default font,
         // see https://aka.ms/applicationconfiguration.
-        AppGlobals.TAppContext = new TrayApplicationContext();
         ApplicationConfiguration.Initialize();
+        AppGlobals.TAppContext = new TrayApplicationContext();
         Application.Run(AppGlobals.TAppContext);
 
     }    

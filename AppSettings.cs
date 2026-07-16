@@ -16,6 +16,10 @@ class AppSettings
         set { if(value != null){_exepath = value;}}
     }
 
+    public string? ExeDir {
+        get { return _exepath.Split(".exe")[0];}
+    }
+
     public static AppSettings Load()
     {
         try

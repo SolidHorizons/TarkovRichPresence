@@ -25,6 +25,10 @@ class TrayApplicationContext : ApplicationContext
         var contextMenu = new ContextMenuStrip();
         contextMenu.Items.Add("Exit", null, (_, _) => ExitApplication());
         _trayIcon.ContextMenuStrip = contextMenu;
+        Task.Run(() =>
+        {
+            new LogController().RunWatchers();
+        });
     }
 
     private void OnTrayIconClick(object? sender, EventArgs e)
