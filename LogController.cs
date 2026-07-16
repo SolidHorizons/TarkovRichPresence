@@ -35,6 +35,7 @@ class LogController
     {
         while (true)
         {
+            Thread.Sleep(1000);
             _currentLogFolder = GetLatestLogFolder();
             FileLogger.Log($"[LogController] Current log folder: {_currentLogFolder}");
             
@@ -78,8 +79,8 @@ class LogController
 
             WaitForLogFiles();
 
-            AppLogCounter = new FileInfo(appLog).Length;
-            BackendLogCounter = new FileInfo(backendLog).Length;
+            AppLogCounter = new FileInfo(appLog!).Length;
+            BackendLogCounter = new FileInfo(backendLog!).Length;
             FileLogger.Log($"[LogController] Starting to watch logs. App size: {AppLogCounter}, Backend size: {BackendLogCounter}");
 
             while (true)
@@ -100,14 +101,14 @@ class LogController
                         
                         WaitForLogFiles();
                         
-                        AppLogCounter = new FileInfo(appLog).Length;
-                        BackendLogCounter = new FileInfo(backendLog).Length;
+                        AppLogCounter = new FileInfo(appLog!).Length;
+                        BackendLogCounter = new FileInfo(backendLog!).Length;
                         
                         FileLogger.Log($"[LogController] Ready with new logs. App size: {AppLogCounter}, Backend size: {BackendLogCounter}");
                     }
 
-                    ReadNewLines(appLog, ref AppLogCounter);
-                    ReadNewLines(backendLog, ref BackendLogCounter);
+                    ReadNewLines(appLog!, ref AppLogCounter);
+                    ReadNewLines(backendLog!, ref BackendLogCounter);
                 }
                 catch (Exception ex)
                 {
@@ -139,7 +140,6 @@ class LogController
             int linesRead = 0;
             while (!reader.EndOfStream)
             {
-                FileLogger.Log($"[LogController] entered reader loop");
                 string? line = reader.ReadLine();
 
                 if (line != null)
