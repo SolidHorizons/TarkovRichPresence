@@ -10,12 +10,12 @@
 using System;
 using System.Reflection;
 
-[assembly: System.Reflection.AssemblyCompanyAttribute("TarkovRichPresence")]
+[assembly: System.Reflection.AssemblyCompanyAttribute("TarkovRichPresence copy")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
-[assembly: System.Reflection.AssemblyProductAttribute("TarkovRichPresence")]
-[assembly: System.Reflection.AssemblyTitleAttribute("TarkovRichPresence")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e5d0218abae7089d3936f38091218a19207c65eb")]
+[assembly: System.Reflection.AssemblyProductAttribute("TarkovRichPresence copy")]
+[assembly: System.Reflection.AssemblyTitleAttribute("TarkovRichPresence copy")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
 [assembly: System.Runtime.Versioning.TargetPlatformAttribute("Windows7.0")]
 [assembly: System.Runtime.Versioning.SupportedOSPlatformAttribute("Windows7.0")]
