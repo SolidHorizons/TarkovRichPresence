@@ -17,7 +17,7 @@ class AppSettings
     }
 
     public string? ExeDir {
-        get { return _exepath.Split(".exe")[0];}
+        get { return Path.GetDirectoryName(_exepath);}
     }
 
     public static AppSettings Load()
