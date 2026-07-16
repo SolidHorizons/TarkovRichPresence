@@ -4,6 +4,12 @@ class TrayApplicationContext : ApplicationContext
 {
     private readonly NotifyIcon _trayIcon;
     private TrayPopup? _popup;
+    private AppSettings _settings = AppSettings.Load();
+
+    public AppSettings getAppSettings()
+    {
+        return _settings;
+    }
 
     public TrayApplicationContext()
     {
@@ -19,6 +25,10 @@ class TrayApplicationContext : ApplicationContext
         var contextMenu = new ContextMenuStrip();
         contextMenu.Items.Add("Exit", null, (_, _) => ExitApplication());
         _trayIcon.ContextMenuStrip = contextMenu;
+        Task.Run(() =>
+        {
+            new LogController().RunWatchers();
+        });
     }
 
     private void OnTrayIconClick(object? sender, EventArgs e)

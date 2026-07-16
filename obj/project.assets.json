@@ -90,19 +90,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\jesse\\.nuget\\packages\\": {}
+    "C:\\Users\\kimoe\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\jesse\\development\\TarkovRichPresence\\TarkovRichPresence.csproj",
+      "projectUniqueName": "C:\\Users\\kimoe\\Desktop\\programing\\Git-Bash-Repos\\TarkovRichPresence\\TarkovRichPresence.csproj",
       "projectName": "TarkovRichPresence",
-      "projectPath": "C:\\Users\\jesse\\development\\TarkovRichPresence\\TarkovRichPresence.csproj",
-      "packagesPath": "C:\\Users\\jesse\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\jesse\\development\\TarkovRichPresence\\obj\\",
+      "projectPath": "C:\\Users\\kimoe\\Desktop\\programing\\Git-Bash-Repos\\TarkovRichPresence\\TarkovRichPresence.csproj",
+      "packagesPath": "C:\\Users\\kimoe\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\kimoe\\Desktop\\programing\\Git-Bash-Repos\\TarkovRichPresence\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\jesse\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\kimoe\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net10.0-windows"
