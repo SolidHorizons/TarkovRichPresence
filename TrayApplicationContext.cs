@@ -4,6 +4,12 @@ class TrayApplicationContext : ApplicationContext
 {
     private readonly NotifyIcon _trayIcon;
     private TrayPopup? _popup;
+    private AppSettings _settings = AppSettings.Load();
+
+    public AppSettings getAppSettings()
+    {
+        return _settings;
+    }
 
     public TrayApplicationContext()
     {
