@@ -10,6 +10,8 @@ class TrayPopup : Form
         _settings = AppSettings.Load();
 
         FormBorderStyle = FormBorderStyle.None;
+        TopMost = true;
+
         ShowInTaskbar = false;
         StartPosition = FormStartPosition.Manual;
         Size = new Size(220, 70);
@@ -32,12 +34,6 @@ class TrayPopup : Form
         Controls.Add(_button);
     }
 
-    protected override void OnDeactivate(EventArgs e)
-    {
-        base.OnDeactivate(e);
-        Close();
-    }
-
     protected override bool ShowWithoutActivation => false;
 
     private void OnSelectExe(object? sender, EventArgs e)
@@ -49,12 +45,25 @@ class TrayPopup : Form
             CheckFileExists = true,
             FileName = _settings.ExePath ?? string.Empty,
         };
-
-        if (dialog.ShowDialog(this) == DialogResult.OK)
+        try
         {
-            _settings.ExePath = dialog.FileName;
-            _settings.Save();
+            if (dialog.ShowDialog(this) == DialogResult.OK)
+            {
+                _settings.ExePath = dialog.FileName;
+                _settings.Save();
+
+                Console.WriteLine("User selected a new Tarkov EXE. Path: " + dialog.FileName);
+            }
+            else
+            {
+                Console.WriteLine("User canceled the file selection.");
+            }
         }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Error occurred while selecting Tarkov EXE: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
 
         Close();
     }
