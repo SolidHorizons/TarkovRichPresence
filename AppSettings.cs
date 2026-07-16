@@ -10,7 +10,15 @@ class AppSettings
         "settings.json"
     );
 
-    public string? ExePath { get; set; }
+    private string ?_exepath;
+    public string? ExePath { 
+        get { return _exepath; } 
+        set { if(value != null){_exepath = value;}}
+    }
+
+    public string? ExeDir {
+        get { return Path.GetDirectoryName(_exepath);}
+    }
 
     public static AppSettings Load()
     {
