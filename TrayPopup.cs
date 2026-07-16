@@ -1,3 +1,7 @@
+using System;
+using System.Drawing;
+using System.Windows.Forms;
+
 namespace TarkovRichPresence;
 
 class TrayPopup : Form
@@ -10,6 +14,8 @@ class TrayPopup : Form
         _settings = AppSettings.Load();
 
         FormBorderStyle = FormBorderStyle.None;
+        TopMost = true;
+        
         ShowInTaskbar = false;
         StartPosition = FormStartPosition.Manual;
         Size = new Size(220, 70);
@@ -49,12 +55,19 @@ class TrayPopup : Form
             CheckFileExists = true,
             FileName = _settings.ExePath ?? string.Empty,
         };
-
-        if (dialog.ShowDialog(this) == DialogResult.OK)
+        try
         {
-            _settings.ExePath = dialog.FileName;
-            _settings.Save();
+            if (dialog.ShowDialog(this) == DialogResult.OK)
+            {
+                _settings.ExePath = dialog.FileName;
+                _settings.Save();
+            }
         }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Error occurred while selecting Tarkov EXE: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
 
         Close();
     }
