@@ -1,8 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "vsMDsV1xX1A=",
+  "dgSpecHash": "qDWuTo3wIsY=",
   "success": true,
-  "projectFilePath": "C:\\Users\\kimoe\\Desktop\\programing\\Git-Bash-Repos\\TarkovRichPresence\\TarkovRichPresence.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "C:\\Users\\jesse\\development\\TarkovRichPresence\\TarkovRichPresence.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\jesse\\.nuget\\packages\\microsoft.netcore.app.ref\\8.0.29\\microsoft.netcore.app.ref.8.0.29.nupkg.sha512",
+    "C:\\Users\\jesse\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\8.0.29\\microsoft.windowsdesktop.app.ref.8.0.29.nupkg.sha512",
+    "C:\\Users\\jesse\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\8.0.29\\microsoft.aspnetcore.app.ref.8.0.29.nupkg.sha512",
+    "C:\\Users\\jesse\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\8.0.29\\microsoft.netcore.app.host.win-x64.8.0.29.nupkg.sha512"
+  ],
   "logs": []
 }
