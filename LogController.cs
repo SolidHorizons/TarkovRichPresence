@@ -28,6 +28,37 @@ class LogController
             ?? "";
     }
 
+    private string? appLog;
+    private string? backendLog;
+
+    private void WaitForLogFiles()
+    {
+        while (true)
+        {
+            _currentLogFolder = GetLatestLogFolder();
+            FileLogger.Log($"[LogController] Current log folder: {_currentLogFolder}");
+            
+            appLog = GetLogPath(_currentLogFolder, "application");
+            if (string.IsNullOrEmpty(appLog))
+            {
+                FileLogger.Log("ERROR: Could not find application log file, retrying...");
+                Thread.Sleep(500);
+                continue;
+            }
+            FileLogger.Log($"[LogController] Found app log: {appLog}");
+            
+            backendLog = GetLogPath(_currentLogFolder, "backend");
+            if (string.IsNullOrEmpty(backendLog))
+            {
+                FileLogger.Log("ERROR: Could not find backend log file, retrying...");
+                Thread.Sleep(500);
+                continue;
+            }
+            FileLogger.Log($"[LogController] Found backend log: {backendLog}");
+            break;
+        }
+    }
+
     public void RunWatchers()
     {
         try 
@@ -45,24 +76,7 @@ class LogController
                 FileLogger.Log($"[LogController] Initialized FullLogPath: {FullLogPath}");
             }
 
-            _currentLogFolder = GetLatestLogFolder();
-            FileLogger.Log($"[LogController] Current log folder: {_currentLogFolder}");
-            
-            string appLog = GetLogPath(_currentLogFolder, "application");
-            if (string.IsNullOrEmpty(appLog))
-            {
-                FileLogger.Log("ERROR: Could not find application log file");
-                return;
-            }
-            FileLogger.Log($"[LogController] Found app log: {appLog}");
-            
-            string backendLog = GetLogPath(_currentLogFolder, "backend");
-            if (string.IsNullOrEmpty(backendLog))
-            {
-                FileLogger.Log("ERROR: Could not find backend log file");
-                return;
-            }
-            FileLogger.Log($"[LogController] Found backend log: {backendLog}");
+            WaitForLogFiles();
 
             AppLogCounter = new FileInfo(appLog).Length;
             BackendLogCounter = new FileInfo(backendLog).Length;
@@ -79,15 +93,17 @@ class LogController
 
                     if (latestFolder != _currentLogFolder)
                     {
-                        _currentLogFolder = latestFolder;
-
-                        appLog = GetLogPath(_currentLogFolder, "application");
-                        backendLog = GetLogPath(_currentLogFolder, "backend");
-
+                        FileLogger.Log("Switched to new log folder, waiting for log files...");
+                        
                         AppLogCounter = 0;
                         BackendLogCounter = 0;
-
-                        FileLogger.Log("Switched to new log folder.");
+                        
+                        WaitForLogFiles();
+                        
+                        AppLogCounter = new FileInfo(appLog).Length;
+                        BackendLogCounter = new FileInfo(backendLog).Length;
+                        
+                        FileLogger.Log($"[LogController] Ready with new logs. App size: {AppLogCounter}, Backend size: {BackendLogCounter}");
                     }
 
                     ReadNewLines(appLog, ref AppLogCounter);
