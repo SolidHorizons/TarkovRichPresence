@@ -1,0 +1,14 @@
+C:\Users\jesse\Documents\TarkovRichPresence-main\TarkovRichPresence-main\bin\Debug\net10.0-windows\TarkovRichPresence.exe
+C:\Users\jesse\Documents\TarkovRichPresence-main\TarkovRichPresence-main\bin\Debug\net10.0-windows\TarkovRichPresence.deps.json
+C:\Users\jesse\Documents\TarkovRichPresence-main\TarkovRichPresence-main\bin\Debug\net10.0-windows\TarkovRichPresence.runtimeconfig.json
+C:\Users\jesse\Documents\TarkovRichPresence-main\TarkovRichPresence-main\bin\Debug\net10.0-windows\TarkovRichPresence.dll
+C:\Users\jesse\Documents\TarkovRichPresence-main\TarkovRichPresence-main\bin\Debug\net10.0-windows\TarkovRichPresence.pdb
+C:\Users\jesse\Documents\TarkovRichPresence-main\TarkovRichPresence-main\obj\Debug\net10.0-windows\TarkovRichPresence.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\jesse\Documents\TarkovRichPresence-main\TarkovRichPresence-main\obj\Debug\net10.0-windows\TarkovRichPresence.AssemblyInfoInputs.cache
+C:\Users\jesse\Documents\TarkovRichPresence-main\TarkovRichPresence-main\obj\Debug\net10.0-windows\TarkovRichPresence.AssemblyInfo.cs
+C:\Users\jesse\Documents\TarkovRichPresence-main\TarkovRichPresence-main\obj\Debug\net10.0-windows\TarkovRichPresence.csproj.CoreCompileInputs.cache
+C:\Users\jesse\Documents\TarkovRichPresence-main\TarkovRichPresence-main\obj\Debug\net10.0-windows\TarkovRichPresence.dll
+C:\Users\jesse\Documents\TarkovRichPresence-main\TarkovRichPresence-main\obj\Debug\net10.0-windows\refint\TarkovRichPresence.dll
+C:\Users\jesse\Documents\TarkovRichPresence-main\TarkovRichPresence-main\obj\Debug\net10.0-windows\TarkovRichPresence.pdb
+C:\Users\jesse\Documents\TarkovRichPresence-main\TarkovRichPresence-main\obj\Debug\net10.0-windows\TarkovRichPresence.genruntimeconfig.cache
+C:\Users\jesse\Documents\TarkovRichPresence-main\TarkovRichPresence-main\obj\Debug\net10.0-windows\ref\TarkovRichPresence.dll
