@@ -16,8 +16,8 @@ class LogController
         if (FullLogPath == null)
             throw new InvalidOperationException("FullLogPath not initialized");
         return Directory.GetDirectories(FullLogPath)
-            .OrderBy(x => x)
-            .Last();
+            .OrderByDescending(x => new DirectoryInfo(x).CreationTime)
+            .First();
     }
 
 
@@ -109,6 +109,7 @@ class LogController
     {
         try
         {
+            FileLogger.Log($"[LogController] running ReadNewLines for {path}");
             using var stream = new FileStream(
                 path,
                 FileMode.Open,
@@ -122,6 +123,7 @@ class LogController
             int linesRead = 0;
             while (!reader.EndOfStream)
             {
+                FileLogger.Log($"[LogController] entered reader loop");
                 string? line = reader.ReadLine();
 
                 if (line != null)
