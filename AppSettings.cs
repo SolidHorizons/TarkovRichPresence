@@ -10,6 +10,14 @@ class AppSettings
         "settings.json"
     );
 
+    private string? _playerId;
+
+    public string? PlayerId
+    {
+        get { return _playerId; }
+        set { _playerId = value; }
+    }
+
     private string ?_exepath;
     public string? ExePath { 
         get { return _exepath; } 
@@ -34,6 +42,7 @@ class AppSettings
     public void Save()
     {
         Directory.CreateDirectory(Path.GetDirectoryName(SettingsPath)!);
+        Console.WriteLine(JsonSerializer.Serialize(this, new JsonSerializerOptions {WriteIndented = true}));
         File.WriteAllText(SettingsPath, JsonSerializer.Serialize(this, new JsonSerializerOptions { WriteIndented = true }));
     }
 }
