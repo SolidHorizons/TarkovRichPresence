@@ -1,7 +1,3 @@
-using System;
-using System.Drawing;
-using System.Windows.Forms;
-
 namespace TarkovRichPresence;
 
 class TrayPopup : Form
@@ -15,7 +11,7 @@ class TrayPopup : Form
 
         FormBorderStyle = FormBorderStyle.None;
         TopMost = true;
-        
+
         ShowInTaskbar = false;
         StartPosition = FormStartPosition.Manual;
         Size = new Size(220, 70);
@@ -38,12 +34,6 @@ class TrayPopup : Form
         Controls.Add(_button);
     }
 
-    protected override void OnDeactivate(EventArgs e)
-    {
-        base.OnDeactivate(e);
-        Close();
-    }
-
     protected override bool ShowWithoutActivation => false;
 
     private void OnSelectExe(object? sender, EventArgs e)
@@ -61,6 +51,12 @@ class TrayPopup : Form
             {
                 _settings.ExePath = dialog.FileName;
                 _settings.Save();
+
+                Console.WriteLine("User selected a new Tarkov EXE. Path: " + dialog.FileName);
+            }
+            else
+            {
+                Console.WriteLine("User canceled the file selection.");
             }
         }
         catch (Exception ex)
