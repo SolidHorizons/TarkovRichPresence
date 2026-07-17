@@ -22,6 +22,46 @@
                 "${workspaceFolder}/TarkovRichPresence.csproj"
             ],
             "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "profile: dotnet-counters (RAM & CPU)",
+            "command": "dotnet-counters",
+            "type": "process",
+            "args": [
+                "collect",
+                "-n",
+                "TarkovRichPresence",
+                "--output",
+                "${workspaceFolder}/traces/counters.csv",
+                "--format",
+                "csv"
+            ],
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated"
+            },
+            "detail": "Attaches to the running TarkovRichPresence process (launch it first) and records working-set/CPU-time to traces/counters.csv. Press Q in the terminal to stop and flush the file."
+        },
+        {
+            "label": "profile: dotnet-trace collect",
+            "command": "dotnet-trace",
+            "type": "process",
+            "args": [
+                "collect",
+                "--output",
+                "${workspaceFolder}/traces/trace.nettrace",
+                "--providers",
+                "Microsoft-DotNETCore-SampleProfiler",
+                "--",
+                "${workspaceFolder}/bin/Debug/net10.0-windows/TarkovRichPresence.exe"
+            ],
+            "dependsOn": "build",
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated"
+            }
         }
     ]
 }
