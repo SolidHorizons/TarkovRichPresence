@@ -130,6 +130,15 @@ class RPCManager
         _playerData = data;
     }
 
+    public void ClearPresence()
+    {
+        if (!_client.IsInitialized)
+            return;
+
+        _currentLocation = null;
+        _client.ClearPresence();
+    }
+
     public void Dispose()
     {
         _client.Dispose();

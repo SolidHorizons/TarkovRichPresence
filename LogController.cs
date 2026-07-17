@@ -31,28 +31,36 @@ class LogController
     private string? appLog;
     private string? backendLog;
 
-    private void WaitForLogFiles()
+    // Returns true if the wait was cancelled before completing.
+    private static bool CancellableSleep(int milliseconds, CancellationToken token)
+        => token.WaitHandle.WaitOne(milliseconds);
+
+    private void WaitForLogFiles(CancellationToken token)
     {
-        while (true)
+        while (!token.IsCancellationRequested)
         {
-            Thread.Sleep(1000);
+            if (CancellableSleep(1000, token))
+                return;
+
             _currentLogFolder = GetLatestLogFolder();
             FileLogger.Log($"[LogController] Current log folder: {_currentLogFolder}");
-            
+
             appLog = GetLogPath(_currentLogFolder, "application");
             if (string.IsNullOrEmpty(appLog))
             {
                 FileLogger.Log("ERROR: Could not find application log file, retrying...");
-                Thread.Sleep(500);
+                if (CancellableSleep(500, token))
+                    return;
                 continue;
             }
             FileLogger.Log($"[LogController] Found app log: {appLog}");
-            
+
             backendLog = GetLogPath(_currentLogFolder, "backend");
             if (string.IsNullOrEmpty(backendLog))
             {
                 FileLogger.Log("ERROR: Could not find backend log file, retrying...");
-                Thread.Sleep(500);
+                if (CancellableSleep(500, token))
+                    return;
                 continue;
             }
             FileLogger.Log($"[LogController] Found backend log: {backendLog}");
@@ -60,9 +68,9 @@ class LogController
         }
     }
 
-    public void RunWatchers()
+    public void RunWatchers(CancellationToken token = default)
     {
-        try 
+        try
         {
             // Initialize on first call (lazy initialization)
             if (FullLogPath == null)
@@ -77,17 +85,20 @@ class LogController
                 FileLogger.Log($"[LogController] Initialized FullLogPath: {FullLogPath}");
             }
 
-            WaitForLogFiles();
+            WaitForLogFiles(token);
+            if (token.IsCancellationRequested)
+                return;
 
             AppLogCounter = new FileInfo(appLog!).Length;
             BackendLogCounter = new FileInfo(backendLog!).Length;
             FileLogger.Log($"[LogController] Starting to watch logs. App size: {AppLogCounter}, Backend size: {BackendLogCounter}");
 
-            while (true)
+            while (!token.IsCancellationRequested)
             {
                 try
                 {
-                    Thread.Sleep(250);
+                    if (CancellableSleep(250, token))
+                        break;
 
                     // Tarkov creates a new folder every launch
                     string latestFolder = GetLatestLogFolder();
@@ -95,15 +106,17 @@ class LogController
                     if (latestFolder != _currentLogFolder)
                     {
                         FileLogger.Log("Switched to new log folder, waiting for log files...");
-                        
+
                         AppLogCounter = 0;
                         BackendLogCounter = 0;
-                        
-                        WaitForLogFiles();
-                        
+
+                        WaitForLogFiles(token);
+                        if (token.IsCancellationRequested)
+                            break;
+
                         AppLogCounter = new FileInfo(appLog!).Length;
                         BackendLogCounter = new FileInfo(backendLog!).Length;
-                        
+
                         FileLogger.Log($"[LogController] Ready with new logs. App size: {AppLogCounter}, Backend size: {BackendLogCounter}");
                     }
 
@@ -115,6 +128,8 @@ class LogController
                     FileLogger.Log($"[LogController] Error in loop: {ex}");
                 }
             }
+
+            FileLogger.Log("[LogController] RunWatchers stopped.");
         }
         catch (Exception ex)
         {
