@@ -66,6 +66,7 @@ class RPCManager
         }
     }
 
+    // Basically does the same as Initialize, but returns the instance. We run initialize in Program.cs to ensure the client is initialized before we set the presence, but this allows us to get the instance without having to worry about whether it's initialized or not.
     public static RPCManager getInstance => _instance ??= new RPCManager();
 
 
@@ -113,7 +114,7 @@ class RPCManager
             Assets = new Assets()
             {
                 LargeImageKey = loc.LocationImage,
-                LargeImageText = "Raid",
+                LargeImageText = loc.Name + " - " + loc.State,
                 SmallImageKey = disablePlayerStatistics ? null : $"{_playerData.PlayerFaction.ToString().ToLower()}_logotype",
                 SmallImageText = disablePlayerStatistics ? null : _playerData.PlayerFaction != Faction.Unknown ? _playerData.PlayerFaction.ToString() : null,
             }
@@ -123,17 +124,9 @@ class RPCManager
     // <summary>
     // Sets the player data for the Discord Rich Presence. Does not update Rich Presence
     // </summary>
-    public void setPlayerData(int level, GameEdition edition, Gamemode mode, Faction faction = Faction.Unknown)
+    public void setPlayerData(PlayerData data)
     {
-        _playerData.Level = level;
-        _playerData.Edition = edition;
-        _playerData.Mode = mode;
-        _playerData.PlayerFaction = faction;
-
-        if (_currentLocation != null)
-        {
-            updateDiscordRpcStatus(_currentLocation);
-        }
+        _playerData = data;
     }
 
     public void Dispose()
