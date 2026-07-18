@@ -109,7 +109,7 @@ class RPCManager
         _client.SetPresence(new RichPresence()
         {
             Details = loc.Name + " - " + loc.State ?? "Unknown Location",
-            State = disablePlayerStatistics ? null : $"{_playerData.Mode}: LVL {_playerData.Experience} • {Regex.Replace(_playerData.Edition.ToString(), "(?<!^)([A-Z])", " $1")}",
+            State = disablePlayerStatistics ? null : $"{_playerData.Mode}: LVL {_playerData.Experience}", //• {Regex.Replace(_playerData.Edition.ToString(), "(?<!^)([A-Z])", " $1")} 
 
             Timestamps = loc.MaxRaidTimeInSeconds > 0 ? new Timestamps(DateTime.UtcNow, DateTime.UtcNow.AddSeconds(loc.MaxRaidTimeInSeconds)) : null,
             Assets = new Assets()
