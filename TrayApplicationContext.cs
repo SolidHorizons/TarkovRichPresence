@@ -1,3 +1,5 @@
+using System.Reflection;
+
 namespace TarkovRichPresence;
 
 class TrayApplicationContext : ApplicationContext
@@ -26,12 +28,26 @@ class TrayApplicationContext : ApplicationContext
         _trayIcon.Click += OnTrayIconClick;
 
         var contextMenu = new ContextMenuStrip();
-        var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
-        contextMenu.Items.Add($"Version {version}").Enabled = false;
+        var version = VersionController.getVersion();
+        contextMenu.Items.Add($"Version {version?.Split('+')[0]}").Enabled = false;
         contextMenu.Items.Add("Exit", null, (_, _) => ExitApplication());
         _trayIcon.ContextMenuStrip = contextMenu;
 
         StartProcessWatcher();
+        _ = CheckForUpdatesAsync();
+    }
+
+    private async Task CheckForUpdatesAsync()
+    {
+        var latestVersion = await VersionController.getLatestVersion();
+        if (VersionController.IsNewer(latestVersion, VersionController.getVersion()))
+        {
+            _trayIcon.ShowBalloonTip(
+                10000,
+                "Update Available",
+                $"Tarkov Rich Presence {latestVersion} is available. You are running {VersionController.getVersion()}.",
+                ToolTipIcon.Info);
+        }
     }
 
     // Idle by default: only a lightweight timer polls for the Tarkov process name.
