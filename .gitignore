@@ -1,2 +1,4 @@
 bin/*
-obj/Debug/*
+obj/*
+traces/*
+TarkovRichPresence.csproj.user

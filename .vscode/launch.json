@@ -11,6 +11,21 @@
             "cwd": "${workspaceFolder}",
             "console": "internalConsole",
             "stopAtEntry": false
+        },
+        {
+            "name": "Monitor TarkovRichPresence (RAM & CPU)",
+            "type": "node-terminal",
+            "request": "launch",
+            "command": "dotnet-counters collect -n TarkovRichPresence --output \"${workspaceFolder}/traces/counters.csv\" --format csv",
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "Profile TarkovRichPresence (dotnet-trace)",
+            "type": "node-terminal",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "command": "dotnet-trace collect --output \"${workspaceFolder}/traces/trace.nettrace\" --providers Microsoft-DotNETCore-SampleProfiler -- \"${workspaceFolder}/bin/Debug/net10.0-windows/TarkovRichPresence.exe\"",
+            "cwd": "${workspaceFolder}"
         }
     ]
 }
