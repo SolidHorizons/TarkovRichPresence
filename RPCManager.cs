@@ -47,7 +47,8 @@ class RPCManager
     private readonly DiscordRpcClient _client = new(ClientId);
     private static RPCManager? _instance;
     private static PlayerData _playerData = new();
-    private Location? _currentLocation;
+
+    private DateTime _lastRPCUpdate = DateTime.MinValue;
 
     private RPCManager()
     {
@@ -73,6 +74,13 @@ class RPCManager
 
     public void setDiscordRpcStatus(string location)
     {
+        if (DateTime.Now < _lastRPCUpdate.AddSeconds(5))
+        {
+            FileLogger.Log("[RPCManager] In previous RPC update timer, no update");
+            return;
+        }
+            
+
         if (string.IsNullOrWhiteSpace(location))
         {
             Console.WriteLine("Location is null or empty. Cannot set Discord RPC status.");
@@ -93,8 +101,9 @@ class RPCManager
             return;
         }
 
-        _currentLocation = loc;
+        // _currentLocation = loc;
         updateDiscordRpcStatus(loc);
+        _lastRPCUpdate = DateTime.Now;
     }
 
     // Made as a separate method to avoid code duplication and to make it easier to update the Discord RPC status in the future.
@@ -135,7 +144,7 @@ class RPCManager
         if (!_client.IsInitialized)
             return;
 
-        _currentLocation = null;
+        // _currentLocation = null;
         _client.ClearPresence();
     }
 

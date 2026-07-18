@@ -19,8 +19,9 @@ class TarkovRPStates
         ["shoreline"] = new Location { Name = "Shoreline", State = "In Raid", LocationImage = "banner_shoreline", MaxRaidTimeInSeconds = 2700 },
         ["woods"] = new Location { Name = "Woods", State = "In Raid", LocationImage = "banner_woods", MaxRaidTimeInSeconds = 2400 },
         ["interchange"] = new Location { Name = "Interchange", State = "In Raid", LocationImage = "banner_interchange", MaxRaidTimeInSeconds = 2400 },
-        ["factory4day"] = new Location { Name = "Factory (Day)", State = "In Raid", LocationImage = "banner_factory_day", MaxRaidTimeInSeconds = 1200 },
-        ["factory4night"] = new Location { Name = "Factory (Night)", State = "In Raid", LocationImage = "banner_factory_night", MaxRaidTimeInSeconds = 1500 },
+        ["factory"] = new Location { Name = "Factory (Day)", State = "In Raid", LocationImage = "banner_factory_day", MaxRaidTimeInSeconds = 1200 }, // Fix for future (or never idc)
+        // ["factory4day"] = new Location { Name = "Factory (Day)", State = "In Raid", LocationImage = "banner_factory_day", MaxRaidTimeInSeconds = 1200 },
+        // ["factory4night"] = new Location { Name = "Factory (Night)", State = "In Raid", LocationImage = "banner_factory_night", MaxRaidTimeInSeconds = 1500 },
         ["reserve"] = new Location { Name = "Reserve", State = "In Raid", LocationImage = "banner_reserve", MaxRaidTimeInSeconds = 2400 },
         ["labsday"] = new Location { Name = "Labs", State = "In Raid", LocationImage = "banner_the_lab", MaxRaidTimeInSeconds = 1800 },
         ["labsnight"] = new Location { Name = "Labs", State = "In Raid", LocationImage = "banner_the_lab", MaxRaidTimeInSeconds = 1800 },
