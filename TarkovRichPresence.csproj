@@ -7,10 +7,10 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Version>0.1.0-alpha</Version>
+    <Version>0.1.1-alpha</Version>
   </PropertyGroup>
 
-  <ItemGroup>
+  <ItemGroup>s
     <Content Include="Resources\favicon.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
