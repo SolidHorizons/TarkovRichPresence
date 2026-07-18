@@ -1,10 +1,11 @@
-using System.Reflection;
+using System.Diagnostics;
 
 namespace TarkovRichPresence;
 
 class TrayApplicationContext : ApplicationContext
 {
     private readonly NotifyIcon _trayIcon;
+    private readonly ContextMenuStrip _contextMenu;
     private TrayPopup? _popup;
     private AppSettings _settings = AppSettings.Load();
     private readonly LogController _logController = new();
@@ -27,11 +28,11 @@ class TrayApplicationContext : ApplicationContext
 
         _trayIcon.Click += OnTrayIconClick;
 
-        var contextMenu = new ContextMenuStrip();
+        _contextMenu = new ContextMenuStrip();
         var version = VersionController.getVersion();
-        contextMenu.Items.Add($"Version {version?.Split('+')[0]}").Enabled = false;
-        contextMenu.Items.Add("Exit", null, (_, _) => ExitApplication());
-        _trayIcon.ContextMenuStrip = contextMenu;
+        _contextMenu.Items.Add($"Version {version?.Split('+')[0]}").Enabled = false;
+        _contextMenu.Items.Add("Exit", null, (_, _) => ExitApplication());
+        _trayIcon.ContextMenuStrip = _contextMenu;
 
         StartProcessWatcher();
         _ = CheckForUpdatesAsync();
@@ -39,15 +40,19 @@ class TrayApplicationContext : ApplicationContext
 
     private async Task CheckForUpdatesAsync()
     {
-        var latestVersion = await VersionController.getLatestVersion();
-        if (VersionController.IsNewer(latestVersion, VersionController.getVersion()))
-        {
-            _trayIcon.ShowBalloonTip(
-                10000,
-                "Update Available",
-                $"Tarkov Rich Presence {latestVersion} is available. You are running {VersionController.getVersion()}.",
-                ToolTipIcon.Info);
-        }
+        var latestRelease = await VersionController.getLatestRelease();
+        if (latestRelease == null || !VersionController.IsNewer(latestRelease.TagName, VersionController.getVersion()))
+            return;
+
+        _trayIcon.ShowBalloonTip(
+            10000,
+            "Update Available",
+            $"Tarkov Rich Presence {latestRelease.TagName} is available. You are running {VersionController.getVersion()}.",
+            ToolTipIcon.Info);
+
+        var updateItem = new ToolStripMenuItem($"Update available: {latestRelease.TagName}");
+        updateItem.Click += (_, _) => Process.Start(new ProcessStartInfo(latestRelease.HtmlUrl) { UseShellExecute = true });
+        _contextMenu.Items.Insert(0, updateItem);
     }
 
     // Idle by default: only a lightweight timer polls for the Tarkov process name.

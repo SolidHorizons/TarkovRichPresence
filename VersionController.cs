@@ -13,8 +13,8 @@ class VersionController
         return version?.Split('+')[0] ?? "Unknown";
     }
 
-    public static async Task<string?> getLatestVersion()
-    {   
+    public static async Task<LatestRelease?> getLatestRelease()
+    {
         try
         {
             using var httpClient = new HttpClient();
@@ -23,9 +23,17 @@ class VersionController
 
             var response = await httpClient.GetStringAsync("https://api.github.com/repos/solidhorizons/tarkovrichpresence/releases/latest");
             var jsonDoc = JsonDocument.Parse(response);
-            if (jsonDoc.RootElement.TryGetProperty("tag_name", out var tagNameElement))
+
+            var tagName = jsonDoc.RootElement.TryGetProperty("tag_name", out var tagNameElement)
+                ? tagNameElement.GetString()
+                : null;
+            var htmlUrl = jsonDoc.RootElement.TryGetProperty("html_url", out var htmlUrlElement)
+                ? htmlUrlElement.GetString()
+                : null;
+
+            if (tagName != null && htmlUrl != null)
             {
-                return tagNameElement.GetString();
+                return new LatestRelease(tagName, htmlUrl);
             }
         }
         catch (Exception ex)
@@ -53,3 +61,5 @@ class VersionController
         return Version.TryParse(trimmed, out version!);
     }
 }
+
+record LatestRelease(string TagName, string HtmlUrl);
