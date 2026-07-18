@@ -141,7 +141,6 @@ class LogController
     {
         try
         {
-            FileLogger.Log($"[LogController] running ReadNewLines for {path}");
             using var stream = new FileStream(
                 path,
                 FileMode.Open,
@@ -165,8 +164,6 @@ class LogController
             }
 
             position = stream.Position;
-            if (linesRead > 0)
-                FileLogger.Log($"[ReadNewLines] Read {linesRead} lines from {Path.GetFileName(path)}");
         }
         catch (Exception ex)
         {
