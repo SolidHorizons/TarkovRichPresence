@@ -2,9 +2,9 @@ using System.Text.RegularExpressions;
 
 public static class RegexController
 {
-    public const string RE_MAP = @"scene preset path:maps/(?<mapname>[^_]+)_preset\.bundle"; //application log
-    public const string RE_TALKING_TO_TRADER = @"getTraderAssort/(?<traderid>[0-9a-fA-F]{24})"; //backend log
-    public const string RE_ACCOUNT_ID = @"AccountId:(?<accountid>\d+)"; //application log
+    public static Regex RE_MAP = new Regex(@"scene preset path:maps/(?<mapname>[^_]+)_preset\.bundle"); //application log
+    public static Regex RE_TALKING_TO_TRADER = new Regex(@"getTraderAssort/(?<traderid>[0-9a-fA-F]{24})"); //backend log
+    public static Regex RE_ACCOUNT_ID = new Regex(@"AccountId:(?<accountid>\d+)"); //application log
 
     public static Dictionary<string, string> TraderIDTranslation = new Dictionary<string, string>{
         {"54cb50c76803fa8b248b4571", "Prapor"},
@@ -18,7 +18,23 @@ public static class RegexController
         {"6617beeaa9cfa777ca915b7c", "Ref"}
     };
 
-    
+    public static string CheckRegexOnLine(Regex re, string line)
+    {
+        if(line is not null)
+        {
+            return re.Match(line).ToString();   
+        }
+        return null!;
+    }
 
+    public static string DecodeTrader(string traderid)
+    {
+        return TraderIDTranslation[traderid];
+    }
+
+    public static void HandleMatch(KeyValuePair<string,string> match)
+    {
+        
+    }
     
 }
