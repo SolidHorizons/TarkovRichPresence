@@ -156,7 +156,7 @@ class LogController
             {
                 string? line = reader.ReadLine();
 
-                Dictionary<string,string> lineResult = null!;
+                Dictionary<string,string> lineResult = new();
 
                 if (line != null)
                 {
