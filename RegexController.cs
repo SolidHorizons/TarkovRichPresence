@@ -4,6 +4,7 @@ public static class RegexController
 {
     public const string RE_MAP = @"scene preset path:maps/(?<mapname>[^_]+)_preset\.bundle"; //application log
     public const string RE_TALKING_TO_TRADER = @"getTraderAssort/(?<traderid>[0-9a-fA-F]{24})"; //backend log
+    public const string RE_ACCOUNT_ID = @"AccountId:(?<accountid>\d+)"; //application log
 
     public static Dictionary<string, string> TraderIDTranslation = new Dictionary<string, string>{
         {"54cb50c76803fa8b248b4571", "Prapor"},
@@ -16,6 +17,8 @@ public static class RegexController
         {"5c0647fdd443bc2504c2d371", "Jeager"},
         {"6617beeaa9cfa777ca915b7c", "Ref"}
     };
+
+    
 
     
 }
