@@ -1,3 +1,5 @@
+using System.Reflection;
+
 namespace TarkovRichPresence;
 
 class TrayApplicationContext : ApplicationContext
@@ -26,8 +28,9 @@ class TrayApplicationContext : ApplicationContext
         _trayIcon.Click += OnTrayIconClick;
 
         var contextMenu = new ContextMenuStrip();
-        var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
-        contextMenu.Items.Add($"Version {version}").Enabled = false;
+        var version = Assembly.GetExecutingAssembly()
+            .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
+        contextMenu.Items.Add($"Version {version?.Split('+')[0]}").Enabled = false;
         contextMenu.Items.Add("Exit", null, (_, _) => ExitApplication());
         _trayIcon.ContextMenuStrip = contextMenu;
 
