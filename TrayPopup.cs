@@ -50,6 +50,9 @@ class TrayPopup : Form
             if (dialog.ShowDialog(this) == DialogResult.OK)
             {
                 _settings.ExePath = dialog.FileName;
+
+                _settings.PlayerId = PlayerIdFetcher.GetPlayerIdFromLog(_settings.ExeDir + "\\Logs");
+
                 _settings.Save();
 
                 Console.WriteLine("User selected a new Tarkov EXE. Path: " + dialog.FileName);
