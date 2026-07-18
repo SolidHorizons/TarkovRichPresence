@@ -15,7 +15,12 @@ class LogController
     {
         if (FullLogPath == null)
             throw new InvalidOperationException("FullLogPath not initialized");
-        return Directory.GetDirectories(FullLogPath)
+
+        var folders = Directory.GetDirectories(FullLogPath);
+        if (folders.Length == 0)
+            throw new DirectoryNotFoundException($"No log folders found under {FullLogPath}");
+
+        return folders
             .OrderByDescending(x => new DirectoryInfo(x).CreationTime)
             .First();
     }
@@ -75,13 +80,21 @@ class LogController
             // Initialize on first call (lazy initialization)
             if (FullLogPath == null)
             {
-                var settings = AppGlobals.TAppContext!.getAppSettings();
-                if (string.IsNullOrEmpty(settings.ExeDir))
+                var settings = AppGlobals.TAppContext?.getAppSettings() ?? AppSettings.Load();
+                if (settings == null)
+                {
+                    FileLogger.Log("ERROR: Unable to load settings for log watching.");
+                    return;
+                }
+
+                var exeDir = settings.ExeDir;
+                if (string.IsNullOrEmpty(exeDir))
                 {
                     FileLogger.Log("ERROR: ExeDir not set in AppSettings. Please configure the Tarkov exe path.");
                     return;
                 }
-                FullLogPath = Path.Combine(settings.ExeDir, LOG_SUBDIR);
+
+                FullLogPath = Path.Combine(exeDir, LOG_SUBDIR);
                 FileLogger.Log($"[LogController] Initialized FullLogPath: {FullLogPath}");
             }
 
@@ -89,8 +102,14 @@ class LogController
             if (token.IsCancellationRequested)
                 return;
 
-            AppLogCounter = new FileInfo(appLog!).Length;
-            BackendLogCounter = new FileInfo(backendLog!).Length;
+            if (string.IsNullOrEmpty(appLog) || string.IsNullOrEmpty(backendLog))
+            {
+                FileLogger.Log("ERROR: Log files were not initialized before starting watchers.");
+                return;
+            }
+
+            AppLogCounter = new FileInfo(appLog).Length;
+            BackendLogCounter = new FileInfo(backendLog).Length;
             FileLogger.Log($"[LogController] Starting to watch logs. App size: {AppLogCounter}, Backend size: {BackendLogCounter}");
 
             while (!token.IsCancellationRequested)
