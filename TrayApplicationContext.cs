@@ -26,6 +26,8 @@ class TrayApplicationContext : ApplicationContext
         _trayIcon.Click += OnTrayIconClick;
 
         var contextMenu = new ContextMenuStrip();
+        var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+        contextMenu.Items.Add($"Version {version}").Enabled = false;
         contextMenu.Items.Add("Exit", null, (_, _) => ExitApplication());
         _trayIcon.ContextMenuStrip = contextMenu;
 
