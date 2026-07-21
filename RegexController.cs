@@ -15,6 +15,7 @@ public static class RegexController
     public static Regex RE_TALKING_TO_TRADER = new Regex(@"getTraderAssort/(?<traderid>[0-9a-fA-F]{24})"); //backend log
     public static Regex RE_ACCOUNT_ID = new Regex(@"AccountId:(?<accountid>\d+)"); //application log
     public static Regex RE_INSURANCE_SCREEN = new Regex(@"client/insurance/items/list/cost"); //backend log
+    public static Regex RE_RAGFAIR_FIND = new Regex(@"ragfair/find"); //backend log
 
     public static Dictionary<string, string> TraderIDTranslation = new Dictionary<string, string>{
         {"54cb50c76803fa8b248b4571", "Prapor"},
