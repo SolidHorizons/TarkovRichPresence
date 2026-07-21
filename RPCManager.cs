@@ -29,6 +29,7 @@ enum Gamemode
     Unknown,
 }
 
+
 class PlayerData
 {
     public string Nickname { get; set; } = "";
@@ -72,7 +73,7 @@ class RPCManager
     public static RPCManager getInstance => _instance ??= new RPCManager();
 
 
-    public void setDiscordRpcStatus(string location)
+    public void setDiscordRpcStatusLocation(string location)
     {
         if (DateTime.Now < _lastRPCUpdate.AddSeconds(5))
         {
@@ -102,12 +103,44 @@ class RPCManager
         }
 
         // _currentLocation = loc;
-        updateDiscordRpcStatus(loc);
+        updateDiscordRpcStatusLocation(loc);
+        _lastRPCUpdate = DateTime.Now;
+    }
+
+    public void setDiscordRpcStatusTraderConversation(string trader)
+    {
+        if (DateTime.Now < _lastRPCUpdate.AddSeconds(5))
+        {
+            FileLogger.Log("[RPCManager] In previous RPC update timer, no update");
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(trader))
+        {
+            Console.WriteLine("Trader conversation is null or empty. Cannot set Discord RPC status.");
+            return;
+        }
+
+        if (!_client.IsInitialized)
+        {
+            Console.WriteLine("Discord RPC client is not initialized.");
+            return;
+        }
+
+        TraderConversation? conversation = TarkovRPStates.GetTraderConversation(trader);
+
+        if (conversation == null)
+        {
+            Console.WriteLine($"Trader conversation '{trader}' not found in TarkovRPStates.");
+            return;
+        }
+
+        updateDiscordRpcStatusTraderConversation(conversation);
         _lastRPCUpdate = DateTime.Now;
     }
 
     // Made as a separate method to avoid code duplication and to make it easier to update the Discord RPC status in the future.
-    private void updateDiscordRpcStatus(Location loc)
+    private void updateDiscordRpcStatusLocation(Location loc)
     {
         if (!_client.IsInitialized)
         {
@@ -125,6 +158,28 @@ class RPCManager
             {
                 LargeImageKey = loc.LocationImage,
                 LargeImageText = loc.Name + " - " + loc.State,
+                SmallImageKey = disablePlayerStatistics ? null : $"{_playerData.PlayerFaction.ToString().ToLower()}_logotype",
+                SmallImageText = disablePlayerStatistics ? null : _playerData.PlayerFaction != Faction.Unknown ? _playerData.PlayerFaction.ToString() : null,
+            }
+        });
+    }
+
+    private void updateDiscordRpcStatusTraderConversation(TraderConversation conversation)
+    {
+        if (!_client.IsInitialized)
+        {
+            Console.WriteLine("Discord RPC client is not initialized.");
+            return;
+        }
+
+        _client.SetPresence(new RichPresence()
+        {
+            Details = $"Talking to {conversation.Name}",
+            State = disablePlayerStatistics ? conversation.State : $"{conversation.State} • {_playerData.Mode}: LVL {_playerData.Experience}",
+            Assets = new Assets()
+            {
+                LargeImageKey = string.IsNullOrWhiteSpace(conversation.TraderImage) ? "banner_hideout" : conversation.TraderImage,
+                LargeImageText = conversation.Name,
                 SmallImageKey = disablePlayerStatistics ? null : $"{_playerData.PlayerFaction.ToString().ToLower()}_logotype",
                 SmallImageText = disablePlayerStatistics ? null : _playerData.PlayerFaction != Faction.Unknown ? _playerData.PlayerFaction.ToString() : null,
             }

@@ -8,6 +8,13 @@ class Location
     public int MaxRaidTimeInSeconds { get; init; } = 0; // Max raid time in seconds, used for the progress bar, when 0 assume location like stash which does not have a time limit
 }
 
+class TraderConversation
+{
+    public string Name { get; init; } = string.Empty;
+    public string TraderImage { get; init; } = string.Empty;
+    public string State { get; init; } = string.Empty;
+}
+
 class TarkovRPStates
 {
     private static readonly Dictionary<string, Location> _locations = new()
@@ -31,5 +38,36 @@ class TarkovRPStates
         ["labyrinth"] = new Location { Name = "Labyrinth", State = "In Raid", LocationImage = "banner_the_labyrinth", MaxRaidTimeInSeconds = 1800 }
     };
 
-    public static Location? GetLocation(string locationKey) => _locations.GetValueOrDefault(locationKey);
+    private static readonly Dictionary<string, TraderConversation> _traders = new()
+    {
+        ["prapor"] = new TraderConversation { Name = "Prapor", State = "Making deals", TraderImage = "Placeholder"},
+        ["therapist"] = new TraderConversation { Name = "Therapist", State = "Exchanging medicin", TraderImage = "Placeholder"},
+        ["fence"] = new TraderConversation { Name = "Fence", State = "Shady bussiness", TraderImage = "Placeholder"},
+        ["skier"] = new TraderConversation { Name = "Skier", State = "Hauling cargo", TraderImage = "Placeholder"},
+        ["peacekeeper"] = new TraderConversation { Name = "Peacekeeper", State = "Discussing treatys", TraderImage = "Placeholder"},
+        ["mechanic"] = new TraderConversation { Name = "Mechanic", State = "Making arms deals", TraderImage = "Placeholder"},
+        ["ragman"] = new TraderConversation { Name = "Ragman", State = "Getting drip", TraderImage = "Placeholder"},
+        ["jaeger"] = new TraderConversation { Name = "Jaeger", State = "Getting camping gear", TraderImage = "Placeholder"},
+        ["ref"] = new TraderConversation { Name = "Ref", State = "Signing arena contract", TraderImage = "Placeholder"}
+    };
+
+    public static Location? GetLocation(string locationKey)
+    {
+        if (string.IsNullOrWhiteSpace(locationKey))
+        {
+            return null;
+        }
+
+        return _locations.GetValueOrDefault(locationKey.Trim().ToLowerInvariant());
+    }
+
+    public static TraderConversation? GetTraderConversation(string convoKey)
+    {
+        if (string.IsNullOrWhiteSpace(convoKey))
+        {
+            return null;
+        }
+
+        return _traders.GetValueOrDefault(convoKey.Trim().ToLowerInvariant());
+    }
 }
