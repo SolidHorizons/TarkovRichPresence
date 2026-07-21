@@ -59,10 +59,12 @@ class TarkovRPStates
         ["ref"] = new TraderConversation { Name = "Ref", State = "Signing arena contract", TraderImage = "ref_mugshot"}
     };
 
+    // Vague name, whatever. Used to show which screen a user is in while not in raid (main menu, flea market, etc.)
     private static readonly Dictionary<string, MenuScreen> _menuScreens = new()
     {
-        ["mainmenu"] = new MenuScreen { Name = "Main Menu", State = "In Menu", MenuImage = "banner_hideout" },
-        ["ragfair"] = new MenuScreen { Name = "Flea Market", State = "Browsing Flea Market", MenuImage = "banner_flea_market"},
+        ["mainmenu"] = new MenuScreen { Name = "Main Menu", State = "Playing Tetris in stash", MenuImage = "banner_hideout" },
+        ["insurance"] = new MenuScreen { Name = "Insurance", State = "Insuring gear", MenuImage = "banner_hideout" }, // Not in use yet...
+        ["ragfair"] = new MenuScreen { Name = "Flea Market", State = "Browsing Flea Market", MenuImage = "banner_flea_market"}, 
     };
 
     public static Location? GetLocation(string locationKey)
