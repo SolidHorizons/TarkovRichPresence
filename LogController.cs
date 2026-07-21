@@ -184,6 +184,10 @@ class LogController
                     {
                         lineResult.Add(RegexController.REGEX_FLAG.map, RegexController.CheckRegexOnLine(RegexController.RE_MAP, line));
                         lineResult.Add(RegexController.REGEX_FLAG.acc, RegexController.CheckRegexOnLine(RegexController.RE_ACCOUNT_ID, line));
+                        lineResult.Add(RegexController.REGEX_FLAG.matching, RegexController.CheckRegexOnLine(RegexController.RE_MATCHMAKING, line));
+                        lineResult.Add(RegexController.REGEX_FLAG.raidStarted, RegexController.CheckRegexOnLine(RegexController.RE_RAID_STARTED, line));
+                        lineResult.Add(RegexController.REGEX_FLAG.raidStartedTransit, RegexController.CheckRegexOnLine(RegexController.RE_RAID_STARTED_TRANSIT, line));
+                        lineResult.Add(RegexController.REGEX_FLAG.raidEnded, RegexController.CheckRegexOnLine(RegexController.RE_RAID_ENDED, line));
 
                     }else if (path.Contains("backend"))
                     {
