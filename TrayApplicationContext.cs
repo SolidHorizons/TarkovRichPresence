@@ -130,7 +130,20 @@ class TrayApplicationContext : ApplicationContext
             FileLogger.Log("Failed to fetch player profile.");
         }
 
-        RPCManager.getInstance.setDiscordRpcStatus("mainmenu");
+        RPCManager.getInstance.setDiscordRpcStatus(
+            "mainmenu",
+            location =>
+            {
+                Location? loc = TarkovRPStates.GetLocation(location);
+
+                if (loc == null)
+                {
+                    Console.WriteLine($"Location '{location}' not found in TarkovRPStates.");
+                    return null;
+                }
+
+                return RPCManager.getInstance.CreateLocationPresence(loc);
+            });
     }
 
     private void ReloadSettingsAndWatcher()

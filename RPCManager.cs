@@ -29,6 +29,7 @@ enum Gamemode
     Unknown,
 }
 
+
 class PlayerData
 {
     public string Nickname { get; set; } = "";
@@ -72,18 +73,17 @@ class RPCManager
     public static RPCManager getInstance => _instance ??= new RPCManager();
 
 
-    public void setDiscordRpcStatus(string location)
+    public void setDiscordRpcStatus<T>(T value, Func<T, RichPresence?> presenceFactory)
     {
         if (DateTime.Now < _lastRPCUpdate.AddSeconds(5))
         {
             FileLogger.Log("[RPCManager] In previous RPC update timer, no update");
             return;
         }
-            
 
-        if (string.IsNullOrWhiteSpace(location))
+        if (value is null)
         {
-            Console.WriteLine("Location is null or empty. Cannot set Discord RPC status.");
+            Console.WriteLine("Discord RPC status input is null. Cannot set Discord RPC status.");
             return;
         }
 
@@ -93,29 +93,20 @@ class RPCManager
             return;
         }
 
-        Location? loc = TarkovRPStates.GetLocation(location);
+        RichPresence? presence = presenceFactory(value);
 
-        if (loc == null)
+        if (presence == null)
         {
-            Console.WriteLine($"Location '{location}' not found in TarkovRPStates.");
             return;
         }
 
-        // _currentLocation = loc;
-        updateDiscordRpcStatus(loc);
+        _client.SetPresence(presence);
         _lastRPCUpdate = DateTime.Now;
     }
 
-    // Made as a separate method to avoid code duplication and to make it easier to update the Discord RPC status in the future.
-    private void updateDiscordRpcStatus(Location loc)
+    internal RichPresence CreateLocationPresence(Location loc)
     {
-        if (!_client.IsInitialized)
-        {
-            Console.WriteLine("Discord RPC client is not initialized.");
-            return;
-        }
-
-        _client.SetPresence(new RichPresence()
+        return new RichPresence()
         {
             Details = loc.Name + " - " + loc.State ?? "Unknown Location",
             State = disablePlayerStatistics ? null : $"{_playerData.Mode}: LVL {_playerData.Experience}", //• {Regex.Replace(_playerData.Edition.ToString(), "(?<!^)([A-Z])", " $1")} 
@@ -128,7 +119,23 @@ class RPCManager
                 SmallImageKey = disablePlayerStatistics ? null : $"{_playerData.PlayerFaction.ToString().ToLower()}_logotype",
                 SmallImageText = disablePlayerStatistics ? null : _playerData.PlayerFaction != Faction.Unknown ? _playerData.PlayerFaction.ToString() : null,
             }
-        });
+        };
+    }
+
+    internal RichPresence CreateTraderConversationPresence(TraderConversation conversation)
+    {
+        return new RichPresence()
+        {
+            Details = $"Talking to {conversation.Name} • {conversation.State}",
+            State = disablePlayerStatistics ? null : $"  {_playerData.Mode}: LVL {_playerData.Experience}",
+            Assets = new Assets()
+            {
+                LargeImageKey = string.IsNullOrWhiteSpace(conversation.TraderImage) ? "banner_hideout" : conversation.TraderImage,
+                LargeImageText = conversation.Name,
+                SmallImageKey = disablePlayerStatistics ? null : $"{_playerData.PlayerFaction.ToString().ToLower()}_logotype",
+                SmallImageText = disablePlayerStatistics ? null : _playerData.PlayerFaction != Faction.Unknown ? _playerData.PlayerFaction.ToString() : null,
+            }
+        };
     }
 
     // <summary>
