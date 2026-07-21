@@ -3,6 +3,12 @@ using TarkovRichPresence;
 
 public static class RegexController
 {
+    public enum REGEX_FLAG
+    {
+        acc, //used for account id
+        map, //used to check what map is currently on
+        trader //used to check which trader is talked to
+    }
     public static Regex RE_MAP = new Regex(@"scene preset path:maps/(?<mapname>.+?)_preset\.bundle"); //application log
     public static Regex RE_TALKING_TO_TRADER = new Regex(@"getTraderAssort/(?<traderid>[0-9a-fA-F]{24})"); //backend log
     public static Regex RE_ACCOUNT_ID = new Regex(@"AccountId:(?<accountid>\d+)"); //application log
@@ -33,24 +39,24 @@ public static class RegexController
         return TraderIDTranslation[traderid];
     }
 
-    public static void HandleMatch(KeyValuePair<string,string> match)
+    public static void HandleMatch(KeyValuePair<REGEX_FLAG,string> match)
     {
         if (string.IsNullOrEmpty(match.Value))
             return;
 
         switch (match.Key)
         {
-            case "trader":
+            case REGEX_FLAG.trader:
                 FileLogger.Log("[RegexController] " + match.Key + ": " + DecodeTrader(match.Value.Split('/')[1]));
                 break;
-            case "acc":
+            case REGEX_FLAG.acc:
                 FileLogger.Log("[RegexController] " + match.Key + ": " + match.Value); // It eees wat it eeesss
                 break;
-            case "map":
+            case REGEX_FLAG.map:
                 FileLogger.Log("[RegexController] " + match.Key + ": " + match.Value.Split("/")[1].Split("_")[0]);
                 RPCManager.getInstance.setDiscordRpcStatus(match.Value.Split("/")[1].Split("_")[0]);
                 break;
-                default:   
+            default:   
                 FileLogger.Log("[RegexController] unknown key: " + match.Value);
                 return;
         }

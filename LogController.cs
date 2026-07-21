@@ -175,24 +175,24 @@ class LogController
             {
                 string? line = reader.ReadLine();
 
-                Dictionary<string,string> lineResult = new();
+                Dictionary<RegexController.REGEX_FLAG,string> lineResult = new();
 
                 if (line != null)
                 {
                     FileLogger.Log($"[{Path.GetFileName(path)}] {line}");
                     if (path.Contains("application"))
                     {
-                        lineResult.Add("map", RegexController.CheckRegexOnLine(RegexController.RE_MAP, line));
-                        lineResult.Add("acc", RegexController.CheckRegexOnLine(RegexController.RE_ACCOUNT_ID, line));
+                        lineResult.Add(RegexController.REGEX_FLAG.map, RegexController.CheckRegexOnLine(RegexController.RE_MAP, line));
+                        lineResult.Add(RegexController.REGEX_FLAG.acc, RegexController.CheckRegexOnLine(RegexController.RE_ACCOUNT_ID, line));
 
                     }else if (path.Contains("backend"))
                     {
-                        lineResult.Add("trader", RegexController.CheckRegexOnLine(RegexController.RE_TALKING_TO_TRADER, line));
+                        lineResult.Add(RegexController.REGEX_FLAG.trader, RegexController.CheckRegexOnLine(RegexController.RE_TALKING_TO_TRADER, line));
                     }
                     linesRead++;
                 }
 
-                foreach(KeyValuePair<string, string> item in lineResult)
+                foreach(KeyValuePair<RegexController.REGEX_FLAG, string> item in lineResult)
                 {
                     if(item.Value is not null) RegexController.HandleMatch(item);
                 }
