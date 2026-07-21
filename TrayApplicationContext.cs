@@ -21,7 +21,7 @@ class TrayApplicationContext : ApplicationContext
     {
         _trayIcon = new NotifyIcon
         {
-            Icon = new Icon(Path.Combine(AppContext.BaseDirectory, "Resources", "favicon.ico")),
+            Icon = Icon.ExtractAssociatedIcon(Environment.ProcessPath!) ?? SystemIcons.Application,
             Text = "Tarkov Rich Presence",
             Visible = true,
         };
