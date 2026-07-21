@@ -193,6 +193,7 @@ class LogController
                     {
                         lineResult.Add(RegexController.REGEX_FLAG.trader, RegexController.CheckRegexOnLine(RegexController.RE_TALKING_TO_TRADER, line));
                         lineResult.Add(RegexController.REGEX_FLAG.menu, RegexController.CheckRegexOnLine(RegexController.RE_INSURANCE_SCREEN, line));
+                        lineResult.Add(RegexController.REGEX_FLAG.menu, RegexController.CheckRegexOnLine(RegexController.RE_RAGFAIR_FIND, line));
                     }
                     linesRead++;
                 }

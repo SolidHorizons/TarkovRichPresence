@@ -23,6 +23,7 @@ public static class RegexController
     public static Regex RE_RAID_STARTED = new Regex(@"GameStarted:"); //application log, raid has actually started
     public static Regex RE_RAID_STARTED_TRANSIT = new Regex(@"\[Transit\] Flag:\w+, RaidId:[0-9a-fA-F]+, Count:\d+, Locations:"); //application log, also seen firing when a raid starts
     public static Regex RE_RAID_ENDED = new Regex(@"CompleteSelectedProfile"); //application log, raid has ended, back on the way to menu
+    public static Regex RE_RAGFAIR_FIND = new Regex(@"ragfair/find"); //backend log
 
     public static Dictionary<string, string> TraderIDTranslation = new Dictionary<string, string>{
         {"54cb50c76803fa8b248b4571", "Prapor"},
