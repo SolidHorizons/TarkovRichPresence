@@ -132,17 +132,17 @@ class TrayApplicationContext : ApplicationContext
 
         RPCManager.getInstance.setDiscordRpcStatus(
             "mainmenu",
-            location =>
+            menuScreen =>
             {
-                Location? loc = TarkovRPStates.GetLocation(location);
+                MenuScreen? screen = TarkovRPStates.GetMenuScreen(menuScreen);
 
-                if (loc == null)
+                if (screen == null)
                 {
-                    Console.WriteLine($"Location '{location}' not found in TarkovRPStates.");
+                    Console.WriteLine($"Location '{menuScreen}' not found in TarkovRPStates.");
                     return null;
                 }
 
-                return RPCManager.getInstance.CreateLocationPresence(loc);
+                return RPCManager.getInstance.CreateMenuScreenPresence(screen);
             });
     }
 

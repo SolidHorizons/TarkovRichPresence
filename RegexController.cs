@@ -7,11 +7,14 @@ public static class RegexController
     {
         acc, //used for account id
         map, //used to check what map is currently on
-        trader //used to check which trader is talked to
+        trader, //used to check which trader is talked to
+        menu, //used to check which menu screen a user is in.
+
     }
     public static Regex RE_MAP = new Regex(@"scene preset path:maps/(?<mapname>.+?)_preset\.bundle"); //application log
     public static Regex RE_TALKING_TO_TRADER = new Regex(@"getTraderAssort/(?<traderid>[0-9a-fA-F]{24})"); //backend log
     public static Regex RE_ACCOUNT_ID = new Regex(@"AccountId:(?<accountid>\d+)"); //application log
+    public static Regex RE_INSURANCE_SCREEN = new Regex(@"client/insurance/items/list/cost"); //backend log
 
     public static Dictionary<string, string> TraderIDTranslation = new Dictionary<string, string>{
         {"54cb50c76803fa8b248b4571", "Prapor"},
@@ -82,6 +85,23 @@ public static class RegexController
                         }
 
                         return RPCManager.getInstance.CreateLocationPresence(loc);
+                    });
+                break;
+            case REGEX_FLAG.menu:
+                FileLogger.Log("[RegexController] " + match.Key + ": " + match.Value);
+                    RPCManager.getInstance.setDiscordRpcStatus(
+                    match.Value.Split("/")[1].Split("_")[0],
+                    menuScreen =>
+                    {
+                        MenuScreen? screen = TarkovRPStates.GetMenuScreen(menuScreen);
+
+                        if (screen == null)
+                        {
+                            Console.WriteLine($"Location '{menuScreen}' not found in TarkovRPStates.");
+                            return null;
+                        }
+
+                        return RPCManager.getInstance.CreateMenuScreenPresence(screen);
                     });
                 break;
             default:   
