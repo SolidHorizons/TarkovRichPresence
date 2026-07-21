@@ -126,8 +126,8 @@ class RPCManager
     {
         return new RichPresence()
         {
-            Details = $"Talking to {conversation.Name}",
-            State = disablePlayerStatistics ? conversation.State : $"{conversation.State} • {_playerData.Mode}: LVL {_playerData.Experience}",
+            Details = $"Talking to {conversation.Name} • {conversation.State}",
+            State = disablePlayerStatistics ? null : $"  {_playerData.Mode}: LVL {_playerData.Experience}",
             Assets = new Assets()
             {
                 LargeImageKey = string.IsNullOrWhiteSpace(conversation.TraderImage) ? "banner_hideout" : conversation.TraderImage,
