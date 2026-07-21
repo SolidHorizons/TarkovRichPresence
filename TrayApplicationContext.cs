@@ -130,7 +130,7 @@ class TrayApplicationContext : ApplicationContext
             FileLogger.Log("Failed to fetch player profile.");
         }
 
-        RPCManager.getInstance.setDiscordRpcStatus("mainmenu");
+        RPCManager.getInstance.setDiscordRpcStatusLocation("mainmenu");
     }
 
     private void ReloadSettingsAndWatcher()

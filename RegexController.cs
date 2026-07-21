@@ -47,14 +47,16 @@ public static class RegexController
         switch (match.Key)
         {
             case REGEX_FLAG.trader:
-                FileLogger.Log("[RegexController] " + match.Key + ": " + DecodeTrader(match.Value.Split('/')[1]));
+                string traderName = DecodeTrader(match.Value.Split('/')[1]);
+                FileLogger.Log("[RegexController] " + match.Key + ": " + traderName);
+                RPCManager.getInstance.setDiscordRpcStatusTraderConversation(traderName);
                 break;
             case REGEX_FLAG.acc:
                 FileLogger.Log("[RegexController] " + match.Key + ": " + match.Value); // It eees wat it eeesss
                 break;
             case REGEX_FLAG.map:
                 FileLogger.Log("[RegexController] " + match.Key + ": " + match.Value.Split("/")[1].Split("_")[0]);
-                RPCManager.getInstance.setDiscordRpcStatus(match.Value.Split("/")[1].Split("_")[0]);
+                RPCManager.getInstance.setDiscordRpcStatusLocation(match.Value.Split("/")[1].Split("_")[0]);
                 break;
             default:   
                 FileLogger.Log("[RegexController] unknown key: " + match.Value);
