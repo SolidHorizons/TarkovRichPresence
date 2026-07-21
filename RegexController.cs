@@ -49,14 +49,40 @@ public static class RegexController
             case REGEX_FLAG.trader:
                 string traderName = DecodeTrader(match.Value.Split('/')[1]);
                 FileLogger.Log("[RegexController] " + match.Key + ": " + traderName);
-                RPCManager.getInstance.setDiscordRpcStatusTraderConversation(traderName);
+                RPCManager.getInstance.setDiscordRpcStatus(
+                    traderName,
+                    trader =>
+                    {
+                        TraderConversation? conversation = TarkovRPStates.GetTraderConversation(trader);
+
+                        if (conversation == null)
+                        {
+                            Console.WriteLine($"Trader conversation '{trader}' not found in TarkovRPStates.");
+                            return null;
+                        }
+
+                        return RPCManager.getInstance.CreateTraderConversationPresence(conversation);
+                    });
                 break;
             case REGEX_FLAG.acc:
                 FileLogger.Log("[RegexController] " + match.Key + ": " + match.Value); // It eees wat it eeesss
                 break;
             case REGEX_FLAG.map:
                 FileLogger.Log("[RegexController] " + match.Key + ": " + match.Value.Split("/")[1].Split("_")[0]);
-                RPCManager.getInstance.setDiscordRpcStatusLocation(match.Value.Split("/")[1].Split("_")[0]);
+                RPCManager.getInstance.setDiscordRpcStatus(
+                    match.Value.Split("/")[1].Split("_")[0],
+                    location =>
+                    {
+                        Location? loc = TarkovRPStates.GetLocation(location);
+
+                        if (loc == null)
+                        {
+                            Console.WriteLine($"Location '{location}' not found in TarkovRPStates.");
+                            return null;
+                        }
+
+                        return RPCManager.getInstance.CreateLocationPresence(loc);
+                    });
                 break;
             default:   
                 FileLogger.Log("[RegexController] unknown key: " + match.Value);

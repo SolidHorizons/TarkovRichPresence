@@ -73,41 +73,7 @@ class RPCManager
     public static RPCManager getInstance => _instance ??= new RPCManager();
 
 
-    public void setDiscordRpcStatusLocation(string location)
-    {
-        if (DateTime.Now < _lastRPCUpdate.AddSeconds(5))
-        {
-            FileLogger.Log("[RPCManager] In previous RPC update timer, no update");
-            return;
-        }
-            
-
-        if (string.IsNullOrWhiteSpace(location))
-        {
-            Console.WriteLine("Location is null or empty. Cannot set Discord RPC status.");
-            return;
-        }
-
-        if (!_client.IsInitialized)
-        {
-            Console.WriteLine("Discord RPC client is not initialized.");
-            return;
-        }
-
-        Location? loc = TarkovRPStates.GetLocation(location);
-
-        if (loc == null)
-        {
-            Console.WriteLine($"Location '{location}' not found in TarkovRPStates.");
-            return;
-        }
-
-        // _currentLocation = loc;
-        updateDiscordRpcStatusLocation(loc);
-        _lastRPCUpdate = DateTime.Now;
-    }
-
-    public void setDiscordRpcStatusTraderConversation(string trader)
+    public void setDiscordRpcStatus<T>(T value, Func<T, RichPresence?> presenceFactory)
     {
         if (DateTime.Now < _lastRPCUpdate.AddSeconds(5))
         {
@@ -115,9 +81,9 @@ class RPCManager
             return;
         }
 
-        if (string.IsNullOrWhiteSpace(trader))
+        if (value is null)
         {
-            Console.WriteLine("Trader conversation is null or empty. Cannot set Discord RPC status.");
+            Console.WriteLine("Discord RPC status input is null. Cannot set Discord RPC status.");
             return;
         }
 
@@ -127,28 +93,20 @@ class RPCManager
             return;
         }
 
-        TraderConversation? conversation = TarkovRPStates.GetTraderConversation(trader);
+        RichPresence? presence = presenceFactory(value);
 
-        if (conversation == null)
+        if (presence == null)
         {
-            Console.WriteLine($"Trader conversation '{trader}' not found in TarkovRPStates.");
             return;
         }
 
-        updateDiscordRpcStatusTraderConversation(conversation);
+        _client.SetPresence(presence);
         _lastRPCUpdate = DateTime.Now;
     }
 
-    // Made as a separate method to avoid code duplication and to make it easier to update the Discord RPC status in the future.
-    private void updateDiscordRpcStatusLocation(Location loc)
+    internal RichPresence CreateLocationPresence(Location loc)
     {
-        if (!_client.IsInitialized)
-        {
-            Console.WriteLine("Discord RPC client is not initialized.");
-            return;
-        }
-
-        _client.SetPresence(new RichPresence()
+        return new RichPresence()
         {
             Details = loc.Name + " - " + loc.State ?? "Unknown Location",
             State = disablePlayerStatistics ? null : $"{_playerData.Mode}: LVL {_playerData.Experience}", //• {Regex.Replace(_playerData.Edition.ToString(), "(?<!^)([A-Z])", " $1")} 
@@ -161,18 +119,12 @@ class RPCManager
                 SmallImageKey = disablePlayerStatistics ? null : $"{_playerData.PlayerFaction.ToString().ToLower()}_logotype",
                 SmallImageText = disablePlayerStatistics ? null : _playerData.PlayerFaction != Faction.Unknown ? _playerData.PlayerFaction.ToString() : null,
             }
-        });
+        };
     }
 
-    private void updateDiscordRpcStatusTraderConversation(TraderConversation conversation)
+    internal RichPresence CreateTraderConversationPresence(TraderConversation conversation)
     {
-        if (!_client.IsInitialized)
-        {
-            Console.WriteLine("Discord RPC client is not initialized.");
-            return;
-        }
-
-        _client.SetPresence(new RichPresence()
+        return new RichPresence()
         {
             Details = $"Talking to {conversation.Name}",
             State = disablePlayerStatistics ? conversation.State : $"{conversation.State} • {_playerData.Mode}: LVL {_playerData.Experience}",
@@ -183,7 +135,7 @@ class RPCManager
                 SmallImageKey = disablePlayerStatistics ? null : $"{_playerData.PlayerFaction.ToString().ToLower()}_logotype",
                 SmallImageText = disablePlayerStatistics ? null : _playerData.PlayerFaction != Faction.Unknown ? _playerData.PlayerFaction.ToString() : null,
             }
-        });
+        };
     }
 
     // <summary>
