@@ -98,9 +98,14 @@ public static class RegexController
                 RaidStateManager.getInstance.EnterLoading();
                 break;
             case REGEX_FLAG.raidStarted:
-            case REGEX_FLAG.raidStartedTransit:
                 FileLogger.Log("[RegexController] " + match.Key + ": raid started");
                 RaidStateManager.getInstance.EnterRaid();
+                break;
+            case REGEX_FLAG.raidStartedTransit:
+                // Fires earlier than GameStarted with imprecise timing, so update the phase but
+                // let GameStarted be the one that actually pushes the Discord presence/timer.
+                FileLogger.Log("[RegexController] " + match.Key + ": raid started (early signal)");
+                RaidStateManager.getInstance.EnterRaid(updatePresence: false);
                 break;
             case REGEX_FLAG.raidEnded:
                 FileLogger.Log("[RegexController] " + match.Key + ": raid ended");

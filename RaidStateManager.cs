@@ -74,9 +74,16 @@ class RaidStateManager
         FileLogger.Log($"[RaidStateManager] Pending raid location set: {location.Name}");
     }
 
-    public void EnterRaid()
+    // updatePresence should only be false for early/imprecise raid-start signals (e.g. the
+    // [Transit] log line), which fire before the raid timer should actually start. They still
+    // flip CurrentPhase so state stays accurate, but only the precise signal (GameStarted) is
+    // allowed to push Discord presence, otherwise the countdown timer starts too early.
+    public void EnterRaid(bool updatePresence = true)
     {
         SetPhase(RaidPhase.InRaid);
+
+        if (!updatePresence)
+            return;
 
         if (CurrentLocation == null)
         {
