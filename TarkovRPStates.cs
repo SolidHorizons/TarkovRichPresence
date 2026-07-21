@@ -8,6 +8,13 @@ class Location
     public int MaxRaidTimeInSeconds { get; init; } = 0; // Max raid time in seconds, used for the progress bar, when 0 assume location like stash which does not have a time limit
 }
 
+class MenuScreen
+{
+    public string Name { get; init; } = string.Empty;
+    public string MenuImage { get; init; } = string.Empty;
+    public string State { get; init; } = string.Empty;
+}
+
 class TraderConversation
 {
     public string Name { get; init; } = string.Empty;
@@ -19,8 +26,9 @@ class TarkovRPStates
 {
     private static readonly Dictionary<string, Location> _locations = new()
     {
-        ["mainmenu"] = new Location { Name = "Main Menu", State = "In Menu", LocationImage = "banner_hideout", MaxRaidTimeInSeconds = 0 },
-        ["lobby"] = new Location { Name = "Lobby", State = "In Lobby", LocationImage = "banner_hideout", MaxRaidTimeInSeconds = 0 },
+        // ["mainmenu"] = new Location { Name = "Main Menu", State = "In Menu", LocationImage = "banner_hideout", MaxRaidTimeInSeconds = 0 },           //
+        // ["insurance"] = new Location { Name = "Insurance", State = "Insuring gear", LocationImage = "banner_hideout", MaxRaidTimeInSeconds = 0 },    // Moved these to menu screens as seemed more fit.
+        // ["lobby"] = new Location { Name = "Lobby", State = "In Lobby", LocationImage = "banner_hideout", MaxRaidTimeInSeconds = 0 },                 //
         ["loading"] = new Location { Name = "Loading Into Raid", State = "Doomscrolling Time", LocationImage = "banner_hideout", MaxRaidTimeInSeconds = 0 },
         ["customs"] = new Location { Name = "Customs", State = "In Raid", LocationImage = "banner_customs", MaxRaidTimeInSeconds = 2400 },
         ["shoreline"] = new Location { Name = "Shoreline", State = "In Raid", LocationImage = "banner_shoreline", MaxRaidTimeInSeconds = 2700 },
@@ -51,6 +59,12 @@ class TarkovRPStates
         ["ref"] = new TraderConversation { Name = "Ref", State = "Signing arena contract", TraderImage = "ref_mugshot"}
     };
 
+    private static readonly Dictionary<string, MenuScreen> _menuScreens = new()
+    {
+        ["mainmenu"] = new MenuScreen { Name = "Main Menu", State = "In Menu", MenuImage = "banner_hideout" },
+        ["ragfair"] = new MenuScreen { Name = "Flea Market", State = "Browsing Flea Market", MenuImage = "banner_flea_market"},
+    };
+
     public static Location? GetLocation(string locationKey)
     {
         if (string.IsNullOrWhiteSpace(locationKey))
@@ -69,5 +83,15 @@ class TarkovRPStates
         }
 
         return _traders.GetValueOrDefault(convoKey.Trim().ToLowerInvariant());
+    }
+
+    public static MenuScreen? GetMenuScreen(string menuScreen)
+    {
+        if (string.IsNullOrWhiteSpace(menuScreen))
+        {
+            return null;
+        }
+
+        return _menuScreens.GetValueOrDefault(menuScreen.Trim().ToLowerInvariant());
     }
 }

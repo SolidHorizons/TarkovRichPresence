@@ -75,7 +75,7 @@ class RPCManager
 
     public void setDiscordRpcStatus<T>(T value, Func<T, RichPresence?> presenceFactory)
     {
-        if (DateTime.Now < _lastRPCUpdate.AddSeconds(5))
+        if (DateTime.Now < _lastRPCUpdate.AddSeconds(2)) // To avoid logging issue with multiple traders, no idea why or how this even triggers. 
         {
             FileLogger.Log("[RPCManager] In previous RPC update timer, no update");
             return;
@@ -132,6 +132,22 @@ class RPCManager
             {
                 LargeImageKey = string.IsNullOrWhiteSpace(conversation.TraderImage) ? "banner_hideout" : conversation.TraderImage,
                 LargeImageText = conversation.Name,
+                SmallImageKey = disablePlayerStatistics ? null : $"{_playerData.PlayerFaction.ToString().ToLower()}_logotype",
+                SmallImageText = disablePlayerStatistics ? null : _playerData.PlayerFaction != Faction.Unknown ? _playerData.PlayerFaction.ToString() : null,
+            }
+        };
+    }
+
+    internal RichPresence CreateMenuScreenPresence(MenuScreen menuScreen)
+    {
+        return new RichPresence()
+        {
+            Details = $"{menuScreen.Name} • {menuScreen.State}",
+            State = disablePlayerStatistics ? null : $"  {_playerData.Mode}: LVL {_playerData.Experience}",
+            Assets = new Assets()
+            {
+                LargeImageKey = string.IsNullOrWhiteSpace(menuScreen.MenuImage) ? "banner_hideout" : menuScreen.MenuImage,
+                LargeImageText = menuScreen.Name,
                 SmallImageKey = disablePlayerStatistics ? null : $"{_playerData.PlayerFaction.ToString().ToLower()}_logotype",
                 SmallImageText = disablePlayerStatistics ? null : _playerData.PlayerFaction != Faction.Unknown ? _playerData.PlayerFaction.ToString() : null,
             }
