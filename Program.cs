@@ -7,6 +7,8 @@ static class AppGlobals
 
 static class Program
 {
+    private static Mutex? _instanceMutex;
+
     /// <summary>
     ///  The main entry point for the application.
     /// </summary>
@@ -17,6 +19,13 @@ static class Program
     {
         // Initialize logger first so we can capture all debug output
         FileLogger.Log("Application starting...");
+
+        _instanceMutex = new Mutex(true, "TarkovRichPresence_SingleInstance", out bool createdNew);
+        if (!createdNew)
+        {
+            FileLogger.Log("Another instance is already running. Exiting.");
+            return;
+        }
 
         RPCManager.Initialize();
 
@@ -29,10 +38,17 @@ static class Program
         // only start once TrayApplicationContext detects the Tarkov process is running.
         AppGlobals.TAppContext = new TrayApplicationContext();
 
-        FileLogger.Log("Application initialized, entering message loop...");
-        Application.Run(AppGlobals.TAppContext);
-
-        FileLogger.Log("Application shutting down...");
-        FileLogger.Close();
+        try
+        {
+            FileLogger.Log("Application initialized, entering message loop...");
+            Application.Run(AppGlobals.TAppContext);
+        }
+        finally
+        {
+            FileLogger.Log("Application shutting down...");
+            _instanceMutex.ReleaseMutex();
+            _instanceMutex.Dispose();
+            FileLogger.Close();
+        }
     }
 }
