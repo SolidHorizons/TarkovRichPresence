@@ -31,6 +31,15 @@ class TrayApplicationContext : ApplicationContext
         _contextMenu = new ContextMenuStrip();
         var version = VersionController.getVersion();
         _contextMenu.Items.Add($"Version {version?.Split('+')[0]}").Enabled = false;
+
+        var startupItem = new ToolStripMenuItem("Start with Windows")
+        {
+            CheckOnClick = true,
+            Checked = StartupController.IsEnabled(),
+        };
+        startupItem.Click += (_, _) => StartupController.SetEnabled(startupItem.Checked);
+        _contextMenu.Items.Add(startupItem);
+
         _contextMenu.Items.Add("Exit", null, (_, _) => ExitApplication());
         _trayIcon.ContextMenuStrip = _contextMenu;
 

@@ -37,11 +37,11 @@ class TarkovRPStates
         ["factory"] = new Location { Name = "Factory (Day)", State = "In Raid", LocationImage = "banner_factory_day", MaxRaidTimeInSeconds = 1200 }, // Fix for future (or never idc)
         // ["factory4day"] = new Location { Name = "Factory (Day)", State = "In Raid", LocationImage = "banner_factory_day", MaxRaidTimeInSeconds = 1200 },
         // ["factory4night"] = new Location { Name = "Factory (Night)", State = "In Raid", LocationImage = "banner_factory_night", MaxRaidTimeInSeconds = 1500 },
-        ["reserve"] = new Location { Name = "Reserve", State = "In Raid", LocationImage = "banner_reserve", MaxRaidTimeInSeconds = 2400 },
+        ["rezerv"] = new Location { Name = "Reserve", State = "In Raid", LocationImage = "banner_reserve", MaxRaidTimeInSeconds = 2400 },
         ["labsday"] = new Location { Name = "Labs", State = "In Raid", LocationImage = "banner_the_lab", MaxRaidTimeInSeconds = 1800 },
         ["labsnight"] = new Location { Name = "Labs", State = "In Raid", LocationImage = "banner_the_lab", MaxRaidTimeInSeconds = 1800 },
         ["lighthouse"] = new Location { Name = "Lighthouse", State = "In Raid", LocationImage = "banner_lighthouse", MaxRaidTimeInSeconds = 1800 },
-        ["streets"] = new Location { Name = "Streets", State = "In Raid", LocationImage = "banner_streets", MaxRaidTimeInSeconds = 2400 },
+        ["city"] = new Location { Name = "Streets", State = "In Raid", LocationImage = "banner_streets", MaxRaidTimeInSeconds = 2400 },
         ["groundzero"] = new Location { Name = "Ground Zero", State = "In Raid", LocationImage = "banner_ground_zero", MaxRaidTimeInSeconds = 3000 },
         ["labyrinth"] = new Location { Name = "Labyrinth", State = "In Raid", LocationImage = "banner_the_labyrinth", MaxRaidTimeInSeconds = 1800 }
     };
